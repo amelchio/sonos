@@ -619,7 +619,9 @@ class SonosEntity(MediaPlayerDevice):
         # radio name instead.
         try:
             uri_meta_data = variables["enqueued_transport_uri_meta_data"]
-            if uri_meta_data and (
+            if isinstance(
+                uri_meta_data, pysonos.data_structures.DidlAudioBroadcast
+            ) and (
                 self.state != STATE_PLAYING
                 or self.soco.is_radio_uri(self._media_title)
                 or self._media_title in self._uri
