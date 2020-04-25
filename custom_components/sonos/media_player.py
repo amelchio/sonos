@@ -614,6 +614,17 @@ class SonosEntity(MediaPlayerDevice):
         except (TypeError, KeyError, AttributeError):
             pass
 
+        # Tagging used by e.g. SiriusXM
+        # streamContent="BR P|TYPE=SNG|TITLE 7.15.17 LA|ARTIST Eagles|ALBUM "
+        stream_content = track_info.get("streamContent", "")
+        tags = dict([p.split(" ", 1) for p in stream_content.split("|") if " " in p])
+        if tags.get("TITLE"):
+            self._media_title = tags["TITLE"]
+        if tags.get("ARTIST"):
+            self._media_artist = tags["ARTIST"]
+        if tags.get("ALBUM"):
+            self._media_album_name = tags["ALBUM"]
+
         # Non-playing radios will not have a current title. Radios without tagging
         # can have part of the radio URI as title. In these cases we try to use the
         # radio name instead.
