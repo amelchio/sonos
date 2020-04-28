@@ -580,6 +580,7 @@ class SonosEntity(MediaPlayerDevice):
                 self._media_artist = track_info.get("artist")
                 self._media_album_name = track_info.get("album")
                 self._media_title = track_info.get("title")
+                self._media_image_url = track_info.get("album_art")
 
                 if self.soco.is_radio_uri(track_info["uri"]):
                     variables = event and event.variables
@@ -613,17 +614,6 @@ class SonosEntity(MediaPlayerDevice):
             self._media_image_url = library.build_album_art_full_uri(album_art_uri)
         except (TypeError, KeyError, AttributeError):
             pass
-
-        # Tagging used by e.g. SiriusXM
-        # streamContent="BR P|TYPE=SNG|TITLE 7.15.17 LA|ARTIST Eagles|ALBUM "
-        stream_content = track_info.get("streamContent", "")
-        tags = dict([p.split(" ", 1) for p in stream_content.split("|") if " " in p])
-        if tags.get("TITLE"):
-            self._media_title = tags["TITLE"]
-        if tags.get("ARTIST"):
-            self._media_artist = tags["ARTIST"]
-        if tags.get("ALBUM"):
-            self._media_album_name = tags["ALBUM"]
 
         # Non-playing radios will not have a current title. Radios without tagging
         # can have part of the radio URI as title. In these cases we try to use the
@@ -676,8 +666,6 @@ class SonosEntity(MediaPlayerDevice):
         elif update_media_position:
             self._media_position = rel_time
             self._media_position_updated_at = utcnow()
-
-        self._media_image_url = track_info.get("album_art")
 
     def update_volume(self, event=None):
         """Update information about currently volume settings."""
