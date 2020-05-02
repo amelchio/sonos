@@ -3,8 +3,7 @@
   "name": "Sonos",
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/sonos",
-  "requirements": ["https://github.com/amelchio/pysonos/archive/f981125f4182b2931a846cd6b8c400d7f778e201.zip#pysonos==0.0.26"],
-  "dependencies": [],
+  "requirements": ["pysonos==0.0.25"],
   "ssdp": [
     {
       "st": "urn:schemas-upnp-org:device:ZonePlayer:1"
